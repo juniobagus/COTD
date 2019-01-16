@@ -50,6 +50,24 @@ class App extends React.Component {
     });
   };
 
+  updateFish = (key, updatedFish) => {
+    //1. take a copy of current state of fishes
+    const fishes = { ...this.state.fishes };
+    //2. update the state
+    fishes[key] = updatedFish;
+    //3. set that to state
+    this.setState({ fishes });
+  };
+
+  deleteFish = key => {
+    //1. take a copy of fishees
+    const fishes = { ...this.state.fishes };
+    //2. update the fish
+    fishes[key] = null;
+    //3. update state
+    this.setState({ fishes });
+  };
+
   loadSampleFishes = () => {
     this.setState({ fishes: sampleFishes });
   };
@@ -59,6 +77,15 @@ class App extends React.Component {
     const order = { ...this.state.order };
     //2. Either add or update
     order[key] = order[key] + 1 || 1;
+    //3. call setState to update state object
+    this.setState({ order });
+  };
+
+  removeFromOrder = key => {
+    //1. Take a copy of paste
+    const order = { ...this.state.order };
+    //2. Remove from order
+    delete order[key];
     //3. call setState to update state object
     this.setState({ order });
   };
@@ -81,10 +108,18 @@ class App extends React.Component {
             ))}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order} />
+        <Order
+          fishes={this.state.fishes}
+          order={this.state.order}
+          removeFromOrder={this.removeFromOrder}
+        />
         <Inventory
+          fishes={this.state.fishes}
           addFish={this.addFish}
+          updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
+          storeID={this.props.match.params.storeID}
         />
       </div>
     );
